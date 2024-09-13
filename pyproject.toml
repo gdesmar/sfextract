@@ -26,8 +26,8 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/gdesmar/sfextract"
-"Bug Tracker" = "https://github.com/gdesmar/sfextract/issues"
+"Homepage" = "https://github.com/CybercentreCanada/sfextract"
+"Bug Tracker" = "https://github.com/CybercentreCanada/sfextract/issues"
 
 [project.scripts]
 sfextract = "sfextract.main:main"

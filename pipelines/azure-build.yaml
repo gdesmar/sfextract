@@ -18,7 +18,7 @@ stages:
       displayName: Set python version
       inputs: {versionSpec: 3.8}
     - script: |
-        sudo env "PATH=$PATH" python -m pip install --no-cache-dir -U wheel pip build
+        sudo env "PATH=$PATH" python -m pip install --no-cache-dir -U build
         export TAG=${BUILD_SOURCEBRANCH#"refs/tags/"}
         echo -n ${TAG} > VERSION.txt
         python -m build
