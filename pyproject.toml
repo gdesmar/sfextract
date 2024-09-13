@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sfextract"
+dynamic = ["version"]
+authors = [
+  { name="gdesmar" },
+]
+description = "sfextract tries to extract Setup Factory files on any OS."
+readme = "README.md"
+license = {file = "LICENSE.md"}
+requires-python = ">=3.8"
+dependencies = [
+  "pefile"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Topic :: File Formats",
+    "Topic :: System :: Archiving",
+    "Topic :: System :: Installation/Setup",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/gdesmar/sfextract"
+"Bug Tracker" = "https://github.com/gdesmar/sfextract/issues"
+
+[project.scripts]
+sfextract = "sfextract.main:main"
+
+[tool.setuptools.dynamic]
+version = {file = ["VERSION.txt"]}
