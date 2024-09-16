@@ -17,9 +17,11 @@ FILENAME_SIZE = 264
 
 
 def valid_signature(overlay):
-    first_bytes = b"".join(struct.unpack("c" * len(SIGNATURE), overlay.read(len(SIGNATURE))))
+    potential_signature = overlay.read(len(SIGNATURE))
+    if len(potential_signature) != len(SIGNATURE):
+        return False
     overlay.seek(-len(SIGNATURE), os.SEEK_CUR)
-    return first_bytes == SIGNATURE
+    return b"".join(struct.unpack("c" * len(SIGNATURE), potential_signature)) == SIGNATURE
 
 
 def GetVersionFromManifest(manifest):
