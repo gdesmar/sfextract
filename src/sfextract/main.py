@@ -1,5 +1,5 @@
 import argparse
-from pathlib import Path
+import os
 
 import pefile
 
@@ -32,8 +32,8 @@ def extract(file_path, output_location) -> SetupFactoryExtractor:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("executable", help="path to the executable to be extracted", type=Path)
-    parser.add_argument("-o", "--output", help="location where files are written", type=Path, required=False)
+    parser.add_argument("executable", help="path to the executable to be extracted", type=str)
+    parser.add_argument("-o", "--output", help="location where files are written", type=str, required=False)
     parser.add_argument("-v", "--version", action="version", version=__version__, help="prints program version")
     args = parser.parse_args()
 
@@ -41,16 +41,16 @@ def main():
     output_location = args.output
 
     if not output_location:
-        output_location = file_path.parent / f"{file_path.name}_output"
+        output_location = os.path.join(os.path.dirname(file_path), f"{os.path.basename(file_path)}_output")
 
     try:
         extractor = extract(file_path, output_location)
     except FileNotFoundError:
-        print(f"Coudln't find {file_path.name}")
+        print(f"Coudln't find {os.path.basename(file_path)}")
         return
 
     if extractor is None:
-        print(f"Coudln't find extractor for {file_path.name}")
+        print(f"Coudln't find extractor for {os.path.basename(file_path)}")
         return
 
     print(f"Extracted {len(extractor.files)} files from Setup Factory {'.'.join([str(x) for x in extractor.version])}")

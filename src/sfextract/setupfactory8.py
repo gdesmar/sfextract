@@ -3,7 +3,7 @@ import re
 import struct
 import zlib
 from io import BytesIO
-from pathlib import Path, PureWindowsPath
+from pathlib import PureWindowsPath
 
 import pefile
 
@@ -150,7 +150,7 @@ def DetectCompression(overlay: BytesIO):
 
 def ReadSpecialFile(overlay, output_location, filename, is_xored):
     file_size = struct.unpack("q", overlay.read(8))[0]
-    target_file: Path = output_location / filename
+    target_file = os.path.join(output_location, filename)
     with open(target_file, "wb") as f:
         data = overlay.read(file_size)
         if is_xored:
@@ -174,7 +174,7 @@ class SetupFactory8Extractor(SetupFactoryExtractor):
         self.version = version
         self.overlay = overlay
 
-    def ParseScript(self, script: SFFileEntry, output_location: Path):
+    def ParseScript(self, script: SFFileEntry, output_location):
         with open(script.local_path, "rb") as f:
             decompressed_data = f.read()
         script_data = BytesIO(decompressed_data)
@@ -249,7 +249,7 @@ class SetupFactory8Extractor(SetupFactoryExtractor):
                 *PureWindowsPath(strDestDir.decode("utf-8", errors="ignore")).parts,
                 strBaseName.decode("utf-8", errors="ignore"),
             )
-            target_file: Path = output_location / target_name
+            target_file = os.path.join(output_location, target_name)
 
             self.files.append(
                 SFFileEntry(
@@ -267,7 +267,7 @@ class SetupFactory8Extractor(SetupFactoryExtractor):
 
             compressed_data = self.overlay.read(nCompSize)
             decompressed_data = get_decompressor(self.files[-1].compression).decompress(compressed_data)
-            os.makedirs(target_file.parent, exist_ok=True)
+            os.makedirs(os.path.dirname(target_file), exist_ok=True)
             with open(target_file, "wb") as f:
                 f.write(decompressed_data)
 
@@ -296,7 +296,7 @@ class SetupFactory8Extractor(SetupFactoryExtractor):
             decompressed_data = get_decompressor(compression).decompress(compressed_data)
             if file_crc and file_crc != zlib.crc32(decompressed_data):
                 raise Exception(f"Bad CRC checksum on {name}")
-            target_file: Path = output_location / name.decode("utf-8", errors="ignore")
+            target_file = os.path.join(output_location, name.decode("utf-8", errors="ignore"))
             with open(target_file, "wb") as f:
                 f.write(decompressed_data)
 
