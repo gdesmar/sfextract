@@ -173,7 +173,7 @@ def ReadSpecialFile(overlay, output_location, filename, is_xored):
 class SetupFactory8Extractor(SetupFactoryExtractor):
 
     def __init__(self, version, overlay: BytesIO):
-        self.version = version
+        super().__init__(version)
         self.overlay = overlay
 
     def ParseScript(self, script: SFFileEntry, output_location):

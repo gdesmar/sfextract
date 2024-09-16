@@ -38,8 +38,12 @@ class SFFileEntry:
 
 class SetupFactoryExtractor(ABC):
 
-    version: tuple = -1
-    files: List[SFFileEntry] = []
+    version: tuple
+    files: List[SFFileEntry]
+
+    def __init__(self, version=(-1,)):
+        self.version = version
+        self.files = []
 
     @abstractmethod
     def extract_files(self, output_location):

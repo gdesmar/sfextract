@@ -72,7 +72,7 @@ def ReadSpecialFile(overlay, output_location, filename, is_xored):
 class SetupFactory7Extractor(SetupFactoryExtractor):
 
     def __init__(self, version, overlay: BytesIO):
-        self.version = version
+        super().__init__(version)
         self.overlay = overlay
         self.compression = COMPRESSION.PKWARE
         self.decompressor = get_decompressor(self.compression)
