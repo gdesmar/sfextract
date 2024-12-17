@@ -6,7 +6,15 @@ from pathlib import PureWindowsPath
 
 import pefile
 
-from sfextract import COMPRESSION, SCRIPT_FILE_NAME, SetupFactoryExtractor, SFFileEntry, get_decompressor, xor_two_bytes
+from sfextract import (
+    COMPRESSION,
+    SCRIPT_FILE_NAME,
+    SetupFactoryExtractor,
+    SFFileEntry,
+    TruncatedFileError,
+    get_decompressor,
+    xor_two_bytes,
+)
 
 SIGNATURE = b"\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7"
 
@@ -54,6 +62,10 @@ def ReadSpecialFile(overlay, output_location, filename, is_xored):
     target_file = os.path.join(output_location, filename)
     with open(target_file, "wb") as f:
         data = overlay.read(file_size)
+        if len(data) != file_size:
+            raise TruncatedFileError(
+                f"Special File {filename} expected to be {file_size} bytes but was only {len(data)} bytes."
+            )
         if is_xored:
             xor_key = xor_two_bytes(data[:2], b"MZ")
             data = xor_two_bytes(data, xor_key)

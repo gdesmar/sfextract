@@ -69,3 +69,7 @@ def get_decompressor(compression: COMPRESSION):
             raise Exception("No support for LZMA2 yet")
         case _:
             raise Exception("No valid compression found")
+
+
+class TruncatedFileError(Exception):
+    """Exception thrown when data can not be read as data was expected."""
